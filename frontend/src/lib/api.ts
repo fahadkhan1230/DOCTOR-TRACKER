@@ -1,9 +1,12 @@
 import axios from 'axios';
 
+// Same-origin "/api" by default (Vercel forwards it to the backend). trim() guards against stray spaces.
+const baseURL = (process.env.NEXT_PUBLIC_API_URL ?? '').trim() || '/api';
+
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000/api',
+  baseURL,
   withCredentials: true, // JWT lives in an HttpOnly cookie; JS never sees it
-  timeout: 90000,
+  timeout: 90000, // free-tier backends can take ~60s to wake up
 });
 
 // Expired/invalid session on any protected call -> back to login.
@@ -19,12 +22,19 @@ api.interceptors.response.use(
 );
 
 export interface FieldError { field: string; message: string }
+
 export function errorMessage(e: unknown): string {
-  if (axios.isAxiosError(e)) return e.response?.data?.message ?? 'Cannot reach the server. Please try again.';
+  if (axios.isAxiosError(e)) {
+    if (e.response?.data?.message) return e.response.data.message;
+    if (e.response) return `Server error (${e.response.status}). The backend may be starting up, please retry in a minute.`;
+    return 'Cannot reach the server. Please try again.';
+  }
   return 'Something went wrong';
 }
+
 export function fieldErrors(e: unknown): FieldError[] {
   return axios.isAxiosError(e) ? (e.response?.data?.errors ?? []) : [];
 }
+
 export const clean = <T extends Record<string, unknown>>(p: T) =>
   Object.fromEntries(Object.entries(p).filter(([, v]) => v !== '' && v !== undefined));
