@@ -3,7 +3,7 @@ import axios from 'axios';
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000/api',
   withCredentials: true, // JWT lives in an HttpOnly cookie; JS never sees it
-  timeout: 15000,
+  timeout: 90000,
 });
 
 // Expired/invalid session on any protected call -> back to login.
