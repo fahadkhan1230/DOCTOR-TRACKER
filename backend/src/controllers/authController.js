@@ -2,12 +2,15 @@ import * as auth from '../services/authService.js';
 import { COOKIE_NAME } from '../middleware/authMiddleware.js';
 import { asyncHandler, sendOk } from '../utils/helpers.js';
 
-const cookieOpts = () => ({
-  httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: process.env.COOKIE_SAMESITE || 'lax',
-  path: '/',
-});
+const cookieOpts = () => {
+  const isProd = process.env.NODE_ENV === 'production';
+  return {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
+    path: '/',
+  };
+};
 
 export const login = asyncHandler(async (req, res) => {
   const { token, user } = await auth.login(req.valid.body.email, req.valid.body.password);
