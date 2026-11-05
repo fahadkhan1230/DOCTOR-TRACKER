@@ -1,5 +1,31 @@
 # Doctor Tracker – Doctor & Patient Management System
 
+
+ GitHub Repository: Full project link
+
+Live Frontend URL: 
+Live Backend API URL: https://doctor-tracker-xi.vercel.app/login
+Live Backend Help URL:https://doctor-tracker-lmk0.onrender.com
+Live Backend Help URL:https://doctor-tracker-lmk0.onrender.com/health
+
+
+Demo login credentials:
+Email: Khan1200@gmail.com
+Password: 12345678
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Secure admin web app to manage doctors, their patients, and view live analytics.
 Separate **Next.js** frontend (`:3000`) and **Express + MongoDB** REST API (`:5000`).
 
